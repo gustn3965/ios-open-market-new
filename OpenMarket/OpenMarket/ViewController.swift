@@ -12,14 +12,3 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 }
-
-
-protocol Session: URLSession {
-    func fetch()
-}
-
-class MockSession: Session {
-    func fetch() {
-        
-    }
-}
