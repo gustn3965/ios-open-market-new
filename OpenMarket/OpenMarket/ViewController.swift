@@ -13,3 +13,13 @@ class ViewController: UIViewController {
     }
 }
 
+
+protocol Session: URLSession {
+    func fetch()
+}
+
+class MockSession: Session {
+    func fetch() {
+        
+    }
+}
