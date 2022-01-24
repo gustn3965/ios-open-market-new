@@ -567,5 +567,5 @@ function_body_length:
 reporter: "xcode"
 
 excluded:
-    - OpenMarket/AppDelegate.swift
-    - OpenMarket/SceneDelegate.swift
+    - OpenMarket/Resource/
+    - OpenMarketTests/
