@@ -8,14 +8,14 @@
 import Foundation
 
 struct ProductImage: Codable {
-    var identi: Int
+    var identifier: Int
     var url: String
     var thumbnailUrl: String
     var succeed: Bool
     var issuedAt: String
     
     enum CodingKeys: String, CodingKey {
-        case identi = "id"
+        case identifier = "id"
         case url, succeed
         case thumbnailUrl = "thumbnail_url"
         case issuedAt = "issued_at"

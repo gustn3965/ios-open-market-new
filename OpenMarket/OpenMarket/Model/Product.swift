@@ -8,7 +8,7 @@
 import Foundation
 
 struct Product: Codable {
-    var identi: Int?
+    var identifier: Int?
     var vendorId: Int?
     var name: String?
     var thumbnail: String?
@@ -24,7 +24,7 @@ struct Product: Codable {
     var message: String? // 요청 성공이지만, 상태 코드에 따른 메세지 내용
     
     enum CodingKeys: String, CodingKey {
-        case identi = "id"
+        case identifier = "id"
         case vendorId = "vendor_id"
         case name, thumbnail, currency, price, stock, images, code, message
         case bargainPrice = "bargain_price"

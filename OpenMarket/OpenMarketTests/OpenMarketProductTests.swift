@@ -66,7 +66,7 @@ class OpenMarketProductTests: XCTestCase {
                 exp.fulfill()
                 switch result {
                 case .success(let product):
-                    XCTAssertNotNil(product.identi)
+                    XCTAssertNotNil(product.identifier)
                 case .failure(_):
                     XCTFail()
                 }
