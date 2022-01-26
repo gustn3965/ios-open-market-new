@@ -8,24 +8,25 @@
 @testable import OpenMarket
 import Foundation
 
-class MockSessionErrorSession: Session {
-    func dataTask(request: URLRequest, completion: @escaping OpenMarketResult) {
-        completion(.failure(.sessionError))
+class MockSession: Session {
+    private let data: Data?
+    private let urlResponse: URLResponse?
+    private let error: Error?
+    
+    init(data: Data?, urlResponse: URLResponse?, error: Error?) {
+        self.data = data
+        self.urlResponse = urlResponse
+        self.error = error
+    }
+    
+    func dataTask(request: URLRequest, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        completion(data, urlResponse, error)
     }
 }
 
-class MockSession: Session {
-    private var data: Data?
-    
-    init(data: Data? = nil ) {
-        self.data = data
+func createMockResponse(_ apiHost: String, statusCode: Int) -> HTTPURLResponse? {
+    guard let url: URL = URL(string: apiHost) else {
+        return nil
     }
-    
-    func dataTask(request: URLRequest, completion: @escaping OpenMarketResult) {
-        guard let product = data else {
-            completion(.failure(.noData))
-            return
-        }
-        completion(.success(product))
-    }
+    return HTTPURLResponse(url: url, statusCode: statusCode, httpVersion: nil, headerFields: nil)
 }

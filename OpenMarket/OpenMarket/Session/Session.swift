@@ -10,27 +10,23 @@ import Foundation
 enum OpenMarketError: Error {
     case sessionError
     case noData
+    case noStatusCode
     case parsingError
+    case clientError // 400번대 에러
+    case serverError // 500번대 에러
+    case unknownError
 }
 
 typealias OpenMarketResult = (Result<Data, OpenMarketError>) -> Void
 
 protocol Session {
-    func dataTask(request: URLRequest, completion: @escaping OpenMarketResult)
+    func dataTask(request: URLRequest, completion: @escaping (Data?, URLResponse?, Error?) -> Void)
 }
 
 extension URLSession: Session {
-    func dataTask(request: URLRequest, completion: @escaping OpenMarketResult) {
-        dataTask(with: request) { data, _, error in
-            if error != nil {
-                completion(.failure(.sessionError))
-                return
-            }
-            guard let data = data else {
-                completion(.failure(.noData))
-                return
-            }
-            completion(.success(data))
+    func dataTask(request: URLRequest, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        dataTask(with: request) { data, response, error in
+            completion(data, response, error)
         }.resume()
     }
 }

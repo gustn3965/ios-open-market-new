@@ -17,14 +17,12 @@ struct ProductList: Codable {
     var lastPage: Int?
     var hasNext: Bool?
     var hasPrev: Bool?
-    var code: Int? // 요청 성공이지만, 상태코드 확인
-    var message: String? // 요청 성공이지만, 상태 코드에 따른 메세지 내용
     
     enum CodingKeys: String, CodingKey {
         case pageNumber = "page_no"
         case itemsPerPage = "items_per_page"
         case totalCount = "total_count"
-        case offset, limit, pages, code, message
+        case offset, limit, pages
         case lastPage = "last_page"
         case hasNext = "has_next"
         case hasPrev = "has_prev"

@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ProductListViewModel {
+final class ProductListLoader {
     private let session: Session
     
     init(session: Session = URLSession.shared) {
@@ -21,18 +21,11 @@ final class ProductListViewModel {
                                           itemsPerPage: itemsPerPage) else {
             return
         }
-        session.dataTask(request: request) { result in
-            switch result {
-            case .success(let data):
-                guard let model: ProductList = JSONParser.decode(ProductList.self, from: data) else {
-                    completion(.failure(.parsingError))
-                    return
-                }
-                completion(.success(model))
-                return
-            case .failure(let error):
-                completion(.failure(error))
-            }
+        session.dataTask(request: request) { data, response, error in
+            let result: Result<ProductList, OpenMarketError> = DataTaskHandler.handle(data: data,
+                                                                                      response: response,
+                                                                                      error: error)
+            completion(result)
         }
     }
     
