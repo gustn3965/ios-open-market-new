@@ -116,7 +116,7 @@ class ProductListViewController: UIViewController {
     
     func fetchProductList() {
         indicatorView.startAnimating()
-        ProductListLoader().getProductList(pageNumber: 1, itemsPerPage: 200) { result in
+        ProductListLoader().getProductList(pageNumber: 1, itemsPerPage: 20) { result in
             self.productListImageCache.removeAllObjects()
             switch result {
             case .success(let productList):
