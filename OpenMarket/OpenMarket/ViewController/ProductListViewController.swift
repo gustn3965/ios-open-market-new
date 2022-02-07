@@ -94,7 +94,8 @@ class ProductListViewController: UIViewController {
     // MARK: - Method
     @objc
     func addPostButton() {
-        print(#function)
+        let postProductViewController: PostProductViewController = PostProductViewController()
+        navigationController?.pushViewController(postProductViewController, animated: true)
     }
     
     @objc
