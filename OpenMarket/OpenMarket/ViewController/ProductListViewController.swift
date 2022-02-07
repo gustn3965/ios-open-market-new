@@ -121,10 +121,7 @@ class ProductListViewController: UIViewController {
             case .success(let productList):
                 self.productList = productList.pages ?? []
             case .failure(let error):
-                DispatchQueue.mainThread {
-                    self.indicatorView.stopAnimating()
-                    self.productList = []
-                }
+                self.productList = []
                 print(error)
             }
             DispatchQueue.mainThread {
