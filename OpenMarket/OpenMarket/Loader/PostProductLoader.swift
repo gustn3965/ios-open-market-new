@@ -60,7 +60,7 @@ final class PostProductLoader {
               let lineBreakForm: Data = ("\r\n").data(using: .utf8),
               let productData = JSONParser.encode(product) else { return nil }
         let imagesData: [Data] = images.compactMap { $0?.jpegData(compressionQuality: 0.3) }
-        let imagesForms: [Data] = images.enumerated().compactMap { _ in ("Content-Disposition: form-data; name=images; filename=vapor.jpeg\r\n").data(using: .utf8)
+        let imagesForms: [Data] = images.enumerated().compactMap { ("Content-Disposition: form-data; name=images; filename=vapor\($0.offset).jpeg\r\n").data(using: .utf8)
         }
         
         var data: Data = Data()
