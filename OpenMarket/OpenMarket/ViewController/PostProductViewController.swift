@@ -6,6 +6,22 @@
 //
 import UIKit
 
+let secret: String = "xNE6fW$zqmK2A?Df"
+
+enum TextFieldTouchType {
+    case beginTouch
+    case endTouch
+}
+
+enum BottomInset: CGFloat {
+    case max = 250
+    case min = 0
+    
+    var height: CGFloat {
+        self.rawValue
+    }
+}
+
 class PostProductViewController: UIViewController {
     enum Section: Int, CaseIterable {
         case image, contents, description
@@ -53,7 +69,7 @@ class PostProductViewController: UIViewController {
                 section.orthogonalScrollingBehavior = .continuous
                 section.contentInsets = NSDirectionalEdgeInsets(top: padding, leading: imagePadding + padding, bottom: 0, trailing: imagePadding + padding)
                 return section
-            default:
+            case Section.contents.section, Section.description.section:
                 var itemSize: NSCollectionLayoutSize
                 if sectionIndex == Section.contents.section {
                     itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -71,6 +87,8 @@ class PostProductViewController: UIViewController {
                 section.orthogonalScrollingBehavior = .none
                 section.contentInsets = NSDirectionalEdgeInsets(top: padding, leading: padding, bottom: padding, trailing: padding)
                 return section
+            default:
+                fatalError("Section index out of range")
             }
         }
         return layout
@@ -78,6 +96,8 @@ class PostProductViewController: UIViewController {
     
     // MARK: - Properties
     private let product: Product?
+    private var postProduct: PostProduct = PostProduct(secret: secret)
+    private let postLoader: PostProductLoader = PostProductLoader()
     var selectImages: [UIImage?] = [nil]
     
     // MARK: - Init
@@ -97,30 +117,13 @@ class PostProductViewController: UIViewController {
         setupNavigationBar()
         setupCollectionView()
         setupImagePicker()
-        
-        let product: PostProduct = PostProduct(name: "vapor",
-                                               amount: 500,
-                                               currency: "KRW",
-                                               secret: "xNE6fW$zqmK2A?Df",
-                                               descriptions: "안녕하세요 테스트에요",
-                                               price: 123456)
-        let image: [UIImage?] = [UIImage(systemName: "plus"),
-                                 UIImage(systemName: "plus")]
-        PostProductLoader().postProduct(product, images: image) { result in
-            switch result {
-            case .success(let product):
-                print(product.identifier)
-            case .failure(let error):
-                print(error)
-            }
-        }
     }
     
     // MARK: - Setup
     private func setupNavigationBar() {
         navigationItem.title = product == nil ? "상품등록" : "상품수정"
-        let cancelButton: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelPosting))
-        let doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(donePosting))
+        let cancelButton: UIBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(clickCancelButton))
+        let doneButton: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(clickPostButton))
         navigationItem.setRightBarButton(doneButton, animated: true)
         navigationItem.setLeftBarButton(cancelButton, animated: true)
     }
@@ -134,6 +137,10 @@ class PostProductViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
         collectionView.dataSource = self
+    }
+    
+    private func setupImagePicker() {
+        imagePickerController.delegate = self
     }
     
     private func setupCollectionViewBottomInset(height: CGFloat,
@@ -150,21 +157,38 @@ class PostProductViewController: UIViewController {
             }
         }
     }
-    
-    private func setupImagePicker() {
-        imagePickerController.delegate = self
-    }
-    
+    // MARK: - Method
     @objc
-    func cancelPosting() {
-        print(#function)
+    func clickCancelButton() {
         navigationController?.popViewController(animated: true)
     }
     
     @objc
-    func donePosting() {
-        print(#function)
-        navigationController?.popViewController(animated: true)
+    func clickPostButton() {
+        if !postLoader.isProductAllRequired(postProduct, images: selectImages) {
+            showAlert(title: "아래 중 하나 이상이 없습니다", message: "(이름, 가격, 통화, 설명, secret)")
+            return
+        }
+        
+        postLoader.post(postProduct, images: selectImages) { result in
+            switch result {
+            case .success(_):
+                print("Good")
+            case .failure(let error):
+                self.showAlert(title: error.localizedDescription)
+            }
+            DispatchQueue.mainThread {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
+    
+    func showAlert(title: String?, message: String? = nil) {
+        let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { _ in
+            alert.dismiss(animated: true, completion: nil)
+        }))
+        present(alert, animated: true)
     }
 }
 
@@ -174,54 +198,69 @@ extension PostProductViewController: UICollectionViewDataSource {
         Section.allCases.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.section {
-        case Section.image.section:
-            guard let cell: PostProductImageCell = collectionView.dequeueReusableCell(withReuseIdentifier: PostProductImageCell.identifier, for: indexPath) as? PostProductImageCell else {
-                return UICollectionViewCell() }
-            cell.addImageCompletion = { [weak self] in
-                guard self?.selectImages[indexPath.item] == nil,
-                      let imagePicker: UIImagePickerController = self?.imagePickerController else {
-                          if self?.selectImages.filter({ $0 == nil }).isEmpty == false { return }
-                          self?.selectImages.append(nil)
-                          self?.collectionView.reloadSections(IndexSet(integer: Section.image.section))
-                          return
-                      }
-                self?.present(imagePicker, animated: true)
-            }
-            cell.updateView(by: selectImages[indexPath.item])
-            return cell
-        case Section.contents.section:
-            guard let cell: PostProductContentsCell = collectionView.dequeueReusableCell(withReuseIdentifier: PostProductContentsCell.identifier, for: indexPath) as? PostProductContentsCell else {
-                return UICollectionViewCell() }
-            cell.didTouchTextFieldCompletion = { [weak self] in
-                self?.setupCollectionViewBottomInset(height: 200, indexPath: indexPath)
-            }
-            cell.endTouchTextFieldCompletion = { [weak self] in
-                self?.setupCollectionViewBottomInset(height: 0, indexPath: indexPath)
-            }
-            return cell
-        case Section.description.section:
-            guard let cell: PostProductDescriptionCell = collectionView.dequeueReusableCell(withReuseIdentifier: PostProductDescriptionCell.identifier, for: indexPath) as? PostProductDescriptionCell else {
-                return UICollectionViewCell() }
-            cell.didTouchTextFieldCompletion = { [weak self] in
-                self?.setupCollectionViewBottomInset(height: 200, indexPath: indexPath)
-            }
-            cell.endTouchTextFieldCompletion = { [weak self] in
-                self?.setupCollectionViewBottomInset(height: 0, indexPath: indexPath)
-            }
-            return cell
-        default:
-            fatalError(#function)
-        }
-    }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return selectImages.count
         } else {
             return 1
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        switch indexPath.section {
+        case Section.image.section:
+            guard let cell: PostProductImageCell = collectionView.dequeueReusableCell(withReuseIdentifier: PostProductImageCell.identifier,
+                                                                                      for: indexPath) as? PostProductImageCell else {
+                return UICollectionViewCell() }
+            cell.updateView(by: selectImages[indexPath.item])
+            cell.touchImageViewCompletion = { [weak self] in
+                guard let imagePicker: UIImagePickerController = self?.imagePickerController else { return }
+                if self?.selectImages[indexPath.item] == nil {
+                    self?.present(imagePicker, animated: true)
+                } else if self?.isPlusImageEmpty == true {
+                    self?.appendPlusImage()
+                }
+            }
+            return cell
+        case Section.contents.section:
+            guard let cell: PostProductContentsCell = collectionView.dequeueReusableCell(withReuseIdentifier: PostProductContentsCell.identifier,
+                                                                                         for: indexPath) as? PostProductContentsCell else {
+                return UICollectionViewCell() }
+            cell.updateView(by: postProduct)
+            cell.touchTextFieldCompletion = { [weak self] touchType in
+                switch touchType {
+                case .beginTouch:
+                    self?.setupCollectionViewBottomInset(height: BottomInset.max.height, indexPath: indexPath)
+                case .endTouch:
+                    self?.setupCollectionViewBottomInset(height: BottomInset.min.height, indexPath: indexPath)
+                }
+            }
+            return cell
+        case Section.description.section:
+            guard let cell: PostProductDescriptionCell = collectionView.dequeueReusableCell(withReuseIdentifier: PostProductDescriptionCell.identifier, for: indexPath) as? PostProductDescriptionCell else {
+                return UICollectionViewCell() }
+            cell.updateView(by: postProduct)
+            cell.touchTextFieldCompletion = { [weak self] touchType in
+                switch touchType {
+                case .beginTouch:
+                    self?.setupCollectionViewBottomInset(height: BottomInset.max.height, indexPath: indexPath)
+                case .endTouch:
+                    self?.setupCollectionViewBottomInset(height: BottomInset.min.height, indexPath: indexPath)
+                }
+            }
+            return cell
+        default:
+            fatalError("Section index out of range")
+        }
+    }
+    
+    private func appendPlusImage() {
+        selectImages.append(nil)
+        collectionView.reloadSections(IndexSet(integer: Section.image.section))
+    }
+    
+    private var isPlusImageEmpty: Bool {
+        selectImages.filter({ $0 == nil }).isEmpty
     }
 }
 
@@ -234,9 +273,10 @@ extension PostProductViewController: UINavigationControllerDelegate, UIImagePick
             print("\(#function): No edited image were found.")
             return
         }
+        
+        print(image.jpegData(compressionQuality: 1.0)?.count)
         selectImages.removeLast()
         selectImages.append(image)
         collectionView.reloadSections(IndexSet(integer: Section.image.section))
     }
 }
-

@@ -47,8 +47,8 @@ class PostProductContentsCell: UICollectionViewCell {
     }()
     
     // MARK: - Properties
-    var didTouchTextFieldCompletion: (() -> Void)?
-    var endTouchTextFieldCompletion: (() -> Void)?
+    var touchTextFieldCompletion: ((TextFieldTouchType) -> Void)?
+    private var postProduct: PostProduct?
     private let textFieldHeight: CGFloat = 30
     
     // MARK: - Init
@@ -105,19 +105,19 @@ class PostProductContentsCell: UICollectionViewCell {
     @objc
     private func dismissKeyboard() {
         endEditing(true)
-        endTouchTextFieldCompletion?()
+        touchTextFieldCompletion?(.endTouch)
     }
     
     @objc
     func segmentControlDidChanged(_ control: UISegmentedControl) {
         if control.selectedSegmentIndex == 0 {
-            print()
+            postProduct?.currency = "KRW"
         } else {
-            print()
+            postProduct?.currency = "USD"
         }
     }
     
-    private func createTextField(text: String) -> UITextField{
+    private func createTextField(text: String) -> UITextField {
         let textField: UITextField = UITextField()
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
         textField.leftView = paddingView
@@ -129,16 +129,41 @@ class PostProductContentsCell: UICollectionViewCell {
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }
+    
+    func updateView(by postProduct: PostProduct) {
+        self.postProduct = postProduct
+        titleTextField.text = postProduct.name
+        priceTextField.text = postProduct.price == nil ? nil : String(postProduct.price ?? 0)
+        stockTextField.text = postProduct.amount == nil ? nil : String(postProduct.amount ?? 0)
+        discountTextField.text = postProduct.discountedPrice == nil ? nil : String(postProduct.discountedPrice ?? 0)
+        currencySegmentControl.selectedSegmentIndex = (postProduct.currency == nil || postProduct.currency == "KRW") ? 0 : 1
+        self.postProduct?.currency = currencySegmentControl.selectedSegmentIndex == 0 ? "KRW" : "USD"
+    }
 }
 
 // MARK: - TextField Delegate
 extension PostProductContentsCell: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        didTouchTextFieldCompletion?()
+        touchTextFieldCompletion?(.beginTouch)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         dismissKeyboard()
         return true
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        switch textField {
+        case titleTextField:
+            postProduct?.name = textField.text
+        case priceTextField:
+            postProduct?.price = textField.text == nil ? nil : Int(textField.text ?? "")
+        case stockTextField:
+            postProduct?.amount = textField.text == nil ? nil : Int(textField.text ?? "")
+        case discountTextField:
+            postProduct?.discountedPrice = textField.text == nil ? nil : Int(textField.text ?? "")
+        default:
+            return
+        }
     }
 }

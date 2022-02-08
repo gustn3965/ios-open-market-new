@@ -65,6 +65,11 @@ class ProductListViewController: UIViewController {
 //        fetchProductList()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchProductList()
+    }
+    
     // MARK: - Setup View
     private func setupCollectionView() {
         view.addSubview(collectionView)

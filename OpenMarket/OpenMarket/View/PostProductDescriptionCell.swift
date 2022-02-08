@@ -12,7 +12,6 @@ class PostProductDescriptionCell: UICollectionViewCell {
     let textView: UITextView = {
         let textView: UITextView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
-        //        textView.isEditable = false
         textView.isScrollEnabled = false
         textView.font = UIFont.preferredFont(forTextStyle: .body)
         textView.text = """
@@ -42,8 +41,8 @@ class PostProductDescriptionCell: UICollectionViewCell {
     }()
     
     // MARK: - Properties
-    var didTouchTextFieldCompletion: (() -> Void)?
-    var endTouchTextFieldCompletion: (() -> Void)?
+    var touchTextFieldCompletion: ((TextFieldTouchType) -> Void)?
+    private var postProduct: PostProduct?
     
     // MARK: - Init
     override init(frame: CGRect) {
@@ -91,12 +90,21 @@ class PostProductDescriptionCell: UICollectionViewCell {
     @objc
     private func dismissKeyboard() {
         endEditing(true)
-        endTouchTextFieldCompletion?()
+        touchTextFieldCompletion?(.endTouch)
+    }
+    
+    func updateView(by postProduct: PostProduct) {
+        self.postProduct = postProduct
+        textView.text = postProduct.descriptions
     }
 }
 // MARK: - TextView Delegate
 extension PostProductDescriptionCell: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        didTouchTextFieldCompletion?()
+        touchTextFieldCompletion?(.beginTouch)
+    }
+    
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        postProduct?.descriptions = textView.text?.isEmpty == true ? nil : textView.text
     }
 }

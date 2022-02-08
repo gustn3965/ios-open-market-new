@@ -9,7 +9,6 @@ import Foundation
 @testable import OpenMarket
 import XCTest
 
-let secret: String = "xNE6fW$zqmK2A?Df"
 class PostProductRealTests: XCTestCase {
     func test_상품등록이_성공한다() {
         let product: PostProduct = PostProduct(name: "vapor",
@@ -21,7 +20,7 @@ class PostProductRealTests: XCTestCase {
         let image: [UIImage?] = [UIImage(systemName: "plus"),
                                  UIImage(systemName: "plus")]
         timeout(30) { exp in
-            PostProductLoader().postProduct(product, images: image) { result in
+            PostProductLoader().post(product, images: image) { result in
                 exp.fulfill()
                 switch result {
                 case .success(let product):

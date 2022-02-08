@@ -8,15 +8,6 @@
 import Foundation
 import UIKit.UIImage
 
-struct PostProduct: Codable {
-    var name: String
-    var amount: Int
-    var currency: String
-    var secret: String
-    var descriptions: String
-    var price: Int
-}
-
 final class PostProductLoader {
     private let session: Session
     
@@ -24,7 +15,7 @@ final class PostProductLoader {
         self.session = session
     }
     
-    func postProduct(_ product: PostProduct,
+    func post(_ product: PostProduct,
                      images: [UIImage?],
                      completion: @escaping (Result<Product, OpenMarketError>) -> Void) {
         guard let request = createRequest(by: product, images: images) else {
@@ -69,7 +60,7 @@ final class PostProductLoader {
               let lineBreakForm: Data = ("\r\n").data(using: .utf8),
               let productData = JSONParser.encode(product) else { return nil }
         let imagesData: [Data] = images.compactMap { $0?.jpegData(compressionQuality: 0.3) }
-        let imagesForms: [Data] = images.enumerated().compactMap { ("Content-Disposition: form-data; name=images; filename=vapor\($0.offset).jpeg\r\n").data(using: .utf8)
+        let imagesForms: [Data] = images.enumerated().compactMap { _ in ("Content-Disposition: form-data; name=images; filename=vapor.jpeg\r\n").data(using: .utf8)
         }
         
         var data: Data = Data()
@@ -88,5 +79,17 @@ final class PostProductLoader {
         }
         data.append(closeBoundaryForm)
         return data
+    }
+    
+    func isProductAllRequired(_ product: PostProduct, images: [UIImage?]) -> Bool {
+        if product.name == nil ||
+            product.descriptions == nil ||
+            product.price == nil ||
+            product.currency == nil ||
+            product.secret == nil ||
+            images.filter({ $0 != nil }).isEmpty {
+            return false
+        }
+        return true
     }
 }

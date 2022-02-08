@@ -28,7 +28,7 @@ class PostProductImageCell: UICollectionViewCell {
     }()
     
     // MARK: - Properties
-    var addImageCompletion: (() -> Void)?
+    var touchImageViewCompletion: (() -> Void)?
     
     // MARK: - Init
     override init(frame: CGRect) {
@@ -42,7 +42,7 @@ class PostProductImageCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        addImageCompletion = nil
+        touchImageViewCompletion = nil
         backgroundColor = .systemGray4
         addButton.isHidden = false
         imageView.image = nil 
@@ -65,7 +65,7 @@ class PostProductImageCell: UICollectionViewCell {
     
     @objc
     func clickAddImage() {
-        addImageCompletion?()
+        touchImageViewCompletion?()
     }
     
     func updateView(by image: UIImage?) {
