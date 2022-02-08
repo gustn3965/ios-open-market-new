@@ -97,6 +97,23 @@ class PostProductViewController: UIViewController {
         setupNavigationBar()
         setupCollectionView()
         setupImagePicker()
+        
+        let product: PostProduct = PostProduct(name: "vapor",
+                                               amount: 500,
+                                               currency: "KRW",
+                                               secret: "xNE6fW$zqmK2A?Df",
+                                               descriptions: "안녕하세요 테스트에요",
+                                               price: 123456)
+        let image: [UIImage?] = [UIImage(systemName: "plus"),
+                                 UIImage(systemName: "plus")]
+        PostProductLoader().postProduct(product, images: image) { result in
+            switch result {
+            case .success(let product):
+                print(product.identifier)
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
     
     // MARK: - Setup

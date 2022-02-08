@@ -25,6 +25,8 @@
 		C248824227A2886000B5F12D /* GridProductListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C248824127A2886000B5F12D /* GridProductListCollectionViewCell.swift */; };
 		C248824427A28D2100B5F12D /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C248824327A28D2100B5F12D /* StringExtension.swift */; };
 		C248824627A28F3500B5F12D /* DoubleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C248824527A28F3500B5F12D /* DoubleExtension.swift */; };
+		C26B5A8927B1FBB8001AA201 /* PostProductLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26B5A8827B1FBB8001AA201 /* PostProductLoader.swift */; };
+		C26B5A8C27B20DFE001AA201 /* PostProductRealTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26B5A8B27B20DFE001AA201 /* PostProductRealTests.swift */; };
 		C2850A94279E77FB00BF2CC3 /* XCTestCaseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2850A93279E77FB00BF2CC3 /* XCTestCaseExtension.swift */; };
 		C2850A96279E8B5700BF2CC3 /* MockSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2850A95279E8B5700BF2CC3 /* MockSession.swift */; };
 		C2850A9D279E93E700BF2CC3 /* ProductLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2850A9C279E93E700BF2CC3 /* ProductLoader.swift */; };
@@ -73,6 +75,8 @@
 		C248824127A2886000B5F12D /* GridProductListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridProductListCollectionViewCell.swift; sourceTree = "<group>"; };
 		C248824327A28D2100B5F12D /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		C248824527A28F3500B5F12D /* DoubleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtension.swift; sourceTree = "<group>"; };
+		C26B5A8827B1FBB8001AA201 /* PostProductLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostProductLoader.swift; sourceTree = "<group>"; };
+		C26B5A8B27B20DFE001AA201 /* PostProductRealTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostProductRealTests.swift; sourceTree = "<group>"; };
 		C2850A93279E77FB00BF2CC3 /* XCTestCaseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCaseExtension.swift; sourceTree = "<group>"; };
 		C2850A95279E8B5700BF2CC3 /* MockSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSession.swift; sourceTree = "<group>"; };
 		C2850A9C279E93E700BF2CC3 /* ProductLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductLoader.swift; sourceTree = "<group>"; };
@@ -114,6 +118,7 @@
 		C23B08FD279E46AC006456AD /* OpenMarketTests */ = {
 			isa = PBXGroup;
 			children = (
+				C26B5A8A27B20DEC001AA201 /* PostProductTest */,
 				C248822E27A0D0DF00B5F12D /* ProductTest */,
 				C248370A27A01F6300874541 /* ProductListTest */,
 				C2850A99279E926200BF2CC3 /* Extension */,
@@ -193,6 +198,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		C26B5A8A27B20DEC001AA201 /* PostProductTest */ = {
+			isa = PBXGroup;
+			children = (
+				C26B5A8B27B20DFE001AA201 /* PostProductRealTests.swift */,
+			);
+			path = PostProductTest;
+			sourceTree = "<group>";
+		};
 		C2850A99279E926200BF2CC3 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +227,7 @@
 			children = (
 				C2850A9C279E93E700BF2CC3 /* ProductLoader.swift */,
 				C2850A9E279E93F800BF2CC3 /* ProductListLoader.swift */,
+				C26B5A8827B1FBB8001AA201 /* PostProductLoader.swift */,
 			);
 			path = Loader;
 			sourceTree = "<group>";
@@ -399,6 +413,7 @@
 				C2850A96279E8B5700BF2CC3 /* MockSession.swift in Sources */,
 				C248823227A0D24A00B5F12D /* ProductRealTests.swift in Sources */,
 				C2850A94279E77FB00BF2CC3 /* XCTestCaseExtension.swift in Sources */,
+				C26B5A8C27B20DFE001AA201 /* PostProductRealTests.swift in Sources */,
 				C248370C27A01F7900874541 /* ProductListMockTests.swift in Sources */,
 				C2850AA5279E9F8D00BF2CC3 /* OpenMarketAPICheckTests.swift in Sources */,
 				C248370E27A01F9200874541 /* ProductListRealTests.swift in Sources */,
@@ -410,6 +425,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C26B5A8927B1FBB8001AA201 /* PostProductLoader.swift in Sources */,
 				C2A3616A27B10F0800E0EC82 /* PostProductDescriptionCell.swift in Sources */,
 				C70FB0FF25BEF61C00C9924E /* ProductListViewController.swift in Sources */,
 				C23B0907279E5105006456AD /* ProductList.swift in Sources */,

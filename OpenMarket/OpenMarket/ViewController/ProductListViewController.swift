@@ -62,7 +62,7 @@ class ProductListViewController: UIViewController {
         setupCollectionView()
         setupIndicatorView()
         view.backgroundColor = .systemBackground
-        fetchProductList()
+//        fetchProductList()
     }
     
     // MARK: - Setup View

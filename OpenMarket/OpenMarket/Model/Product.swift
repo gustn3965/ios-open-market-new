@@ -20,11 +20,13 @@ struct Product: Codable {
     var createdAt: String?
     var issuedAt: String?
     var images: [ProductImage]?
+    var description: String?
+    var secret: String?
     
     enum CodingKeys: String, CodingKey {
         case identifier = "id"
         case vendorId = "vendor_id"
-        case name, thumbnail, currency, price, stock, images
+        case name, thumbnail, currency, price, stock, images, description, secret
         case bargainPrice = "bargain_price"
         case discountedPrice = "discounted_price"
         case createdAt = "created_at"
