@@ -62,7 +62,7 @@ class ProductListViewController: UIViewController {
         setupCollectionView()
         setupIndicatorView()
         view.backgroundColor = .systemBackground
-//        fetchProductList()
+        fetchProductList()
     }
     
     override func viewWillAppear(_ animated: Bool) {
