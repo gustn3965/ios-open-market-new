@@ -9,10 +9,10 @@ import UIKit
 
 class PostProductContentsCell: UICollectionViewCell {
     // MARK: - Views
-    private lazy var titleTextField: UITextField = createTextField(text: "상품명")
-    private lazy var priceTextField: UITextField = createTextField(text: "상품가격")
-    private lazy var discountTextField: UITextField = createTextField(text: "할인금액")
-    private lazy var stockTextField: UITextField = createTextField(text: "재고수량")
+    private lazy var titleTextField: ContentsTextField = createContentsTextField(type: .title)
+    private lazy var priceTextField: ContentsTextField = createContentsTextField(type: .price)
+    private lazy var discountTextField: ContentsTextField = createContentsTextField(type: .discount)
+    private lazy var stockTextField: ContentsTextField = createContentsTextField(type: .stock)
     
     private lazy var currencySegmentControl: UISegmentedControl = {
         let segmentControl: UISegmentedControl = UISegmentedControl(items: [NSString("KRW"), NSString("USD")])
@@ -117,20 +117,21 @@ class PostProductContentsCell: UICollectionViewCell {
         }
     }
     
-    private func createTextField(text: String) -> UITextField {
-        let textField: UITextField = UITextField()
+    private func createContentsTextField(type: ContentsTextFieldType) -> ContentsTextField {
+        let textField: ContentsTextField = ContentsTextField(contentsType: type)
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
         textField.leftView = paddingView
         textField.leftViewMode = .always
         textField.backgroundColor = .systemBackground
         textField.layer.borderColor = UIColor.systemGray4.cgColor
         textField.layer.borderWidth = 0.5
-        textField.placeholder = text
+        textField.placeholder = type.placeHolder
+        textField.keyboardType = type.keyboardType
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }
     
-    func updateView(by postProduct: PostProduct) {
+    func updateView(by postProduct: PostProduct, delegate: UITextFieldDelegate) {
         self.postProduct = postProduct
         titleTextField.text = postProduct.name
         priceTextField.text = postProduct.price == nil ? nil : String(postProduct.price ?? 0)
@@ -138,6 +139,11 @@ class PostProductContentsCell: UICollectionViewCell {
         discountTextField.text = postProduct.discountedPrice == nil ? nil : String(postProduct.discountedPrice ?? 0)
         currencySegmentControl.selectedSegmentIndex = (postProduct.currency == nil || postProduct.currency == "KRW") ? 0 : 1
         self.postProduct?.currency = currencySegmentControl.selectedSegmentIndex == 0 ? "KRW" : "USD"
+        
+        titleTextField.delegate = delegate
+        priceTextField.delegate = delegate
+        discountTextField.delegate = delegate
+        stockTextField.delegate = delegate
     }
 }
 

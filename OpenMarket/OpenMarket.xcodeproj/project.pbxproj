@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C226618727B4BCFB00350BA5 /* ContentsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = C226618627B4BCFB00350BA5 /* ContentsTextField.swift */; };
+		C226618A27B4BED700350BA5 /* PostProductContentsTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C226618927B4BED700350BA5 /* PostProductContentsTextFieldDelegate.swift */; };
 		C23B08F6279E3E99006456AD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = C23B08F5279E3E99006456AD /* .swiftlint.yml */; };
 		C23B0907279E5105006456AD /* ProductList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23B0906279E5105006456AD /* ProductList.swift */; };
 		C23B0909279E513B006456AD /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23B0908279E513B006456AD /* Product.swift */; };
@@ -57,6 +59,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C226618627B4BCFB00350BA5 /* ContentsTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsTextField.swift; sourceTree = "<group>"; };
+		C226618927B4BED700350BA5 /* PostProductContentsTextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostProductContentsTextFieldDelegate.swift; sourceTree = "<group>"; };
 		C23B08F5279E3E99006456AD /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		C23B08FC279E46AC006456AD /* OpenMarketTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OpenMarketTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C23B0906279E5105006456AD /* ProductList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductList.swift; sourceTree = "<group>"; };
@@ -117,6 +121,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C226618827B4BEC000350BA5 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				C2A3616527B0C4E000E0EC82 /* PostProductViewController.swift */,
+				C226618927B4BED700350BA5 /* PostProductContentsTextFieldDelegate.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
+		C226618B27B4BEF200350BA5 /* ProductList */ = {
+			isa = PBXGroup;
+			children = (
+				C70FB0FE25BEF61C00C9924E /* ProductListViewController.swift */,
+			);
+			path = ProductList;
+			sourceTree = "<group>";
+		};
 		C23B08FD279E46AC006456AD /* OpenMarketTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,6 +218,7 @@
 				C2A3616727B10EF700E0EC82 /* PostProductContentsCell.swift */,
 				C2A3616927B10F0800E0EC82 /* PostProductDescriptionCell.swift */,
 				C2A3616B27B1112100E0EC82 /* PostProductImageCell.swift */,
+				C226618627B4BCFB00350BA5 /* ContentsTextField.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -238,8 +260,8 @@
 		C2850AA0279E98B300BF2CC3 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				C70FB0FE25BEF61C00C9924E /* ProductListViewController.swift */,
-				C2A3616527B0C4E000E0EC82 /* PostProductViewController.swift */,
+				C226618B27B4BEF200350BA5 /* ProductList */,
+				C226618827B4BEC000350BA5 /* Post */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -434,6 +456,7 @@
 				C23B0907279E5105006456AD /* ProductList.swift in Sources */,
 				C248822B27A0CE2000B5F12D /* ErrorMessage.swift in Sources */,
 				C248824227A2886000B5F12D /* GridProductListCollectionViewCell.swift in Sources */,
+				C226618A27B4BED700350BA5 /* PostProductContentsTextFieldDelegate.swift in Sources */,
 				C23B090B279E5C96006456AD /* Session.swift in Sources */,
 				C23B0909279E513B006456AD /* Product.swift in Sources */,
 				C248823B27A2880900B5F12D /* DispatchQueueExtension.swift in Sources */,
@@ -447,6 +470,7 @@
 				C248824027A2884F00B5F12D /* ListProductListCollectionViewCell.swift in Sources */,
 				C26B5A8E27B2296D001AA201 /* PostProduct.swift in Sources */,
 				C248823927A287EE00B5F12D /* UIViewExtension.swift in Sources */,
+				C226618727B4BCFB00350BA5 /* ContentsTextField.swift in Sources */,
 				C2850A9D279E93E700BF2CC3 /* ProductLoader.swift in Sources */,
 				C248824427A28D2100B5F12D /* StringExtension.swift in Sources */,
 				C248824627A28F3500B5F12D /* DoubleExtension.swift in Sources */,

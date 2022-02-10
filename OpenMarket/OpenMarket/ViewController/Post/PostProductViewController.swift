@@ -98,6 +98,10 @@ class PostProductViewController: UIViewController {
     private let product: Product?
     private var postProduct: PostProduct = PostProduct(secret: secret)
     private let postLoader: PostProductLoader = PostProductLoader()
+    private lazy var postProductContentsTextFieldDelegate: PostProductContentsTextFieldDelegate = {
+        PostProductContentsTextFieldDelegate(postProduct: postProduct)
+    }()
+    
     var selectImages: [UIImage?] = [nil]
     
     // MARK: - Init
@@ -226,8 +230,8 @@ extension PostProductViewController: UICollectionViewDataSource {
             guard let cell: PostProductContentsCell = collectionView.dequeueReusableCell(withReuseIdentifier: PostProductContentsCell.identifier,
                                                                                          for: indexPath) as? PostProductContentsCell else {
                 return UICollectionViewCell() }
-            cell.updateView(by: postProduct)
-            cell.touchTextFieldCompletion = { [weak self] touchType in
+            cell.updateView(by: postProduct, delegate: postProductContentsTextFieldDelegate)
+            postProductContentsTextFieldDelegate.touchTextFieldCompletion = { [weak self] touchType in
                 switch touchType {
                 case .beginTouch:
                     self?.setupCollectionViewBottomInset(height: BottomInset.max.height, indexPath: indexPath)
@@ -280,3 +284,4 @@ extension PostProductViewController: UINavigationControllerDelegate, UIImagePick
         collectionView.reloadSections(IndexSet(integer: Section.image.section))
     }
 }
+
