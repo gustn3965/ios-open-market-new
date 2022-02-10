@@ -41,7 +41,7 @@ class PostProductDescriptionCell: UICollectionViewCell {
     }()
     
     // MARK: - Properties
-    var touchTextFieldCompletion: ((TextFieldTouchType) -> Void)?
+    private var touchTextFieldCompletion: ((TextFieldTouchType) -> Void)?
     private var postProduct: PostProduct?
     
     // MARK: - Init
@@ -67,7 +67,6 @@ class PostProductDescriptionCell: UICollectionViewCell {
             bottomLineView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             bottomLineView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor)
         ])
-        textView.delegate = self
     }
     
     private func setupToolbar() {
@@ -88,23 +87,16 @@ class PostProductDescriptionCell: UICollectionViewCell {
     }
     
     @objc
-    private func dismissKeyboard() {
+    private func dismissKeyboard(_ button: UIButton) {
         endEditing(true)
         touchTextFieldCompletion?(.endTouch)
     }
     
-    func updateView(by postProduct: PostProduct) {
+    func updateView(by postProduct: PostProduct,
+                    textViewDelegate: PostProductDescriptionTextViewDelegate) {
         self.postProduct = postProduct
         textView.text = postProduct.descriptions
-    }
-}
-// MARK: - TextView Delegate
-extension PostProductDescriptionCell: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        touchTextFieldCompletion?(.beginTouch)
-    }
-    
-    func textViewDidChangeSelection(_ textView: UITextView) {
-        postProduct?.descriptions = textView.text?.isEmpty == true ? nil : textView.text
+        textView.delegate = (textViewDelegate as? UITextViewDelegate)
+        touchTextFieldCompletion = textViewDelegate.touchTextFieldCompletion
     }
 }

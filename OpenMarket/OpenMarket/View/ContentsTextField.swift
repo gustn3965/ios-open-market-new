@@ -48,8 +48,4 @@ class ContentsTextField: UITextField {
     required init?(coder: NSCoder) {
         fatalError("story board didn't implemented")
     }
-    
-    deinit {
-        print("contentsTextField 죽음 \n")
-    }
 }

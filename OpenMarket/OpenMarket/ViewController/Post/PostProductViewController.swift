@@ -101,6 +101,9 @@ class PostProductViewController: UIViewController {
     private lazy var postProductContentsTextFieldDelegate: PostProductContentsTextFieldDelegate = {
         PostProductContentsTextFieldDelegate(postProduct: postProduct)
     }()
+    private lazy var postProductDescriptionTextViewDelegate: PostProductDescriptionTextViewDelegate = {
+        PostProductDescriptionTextViewDelegate(postProduct: postProduct)
+    }()
     
     var selectImages: [UIImage?] = [nil]
     
@@ -243,8 +246,7 @@ extension PostProductViewController: UICollectionViewDataSource {
         case Section.description.section:
             guard let cell: PostProductDescriptionCell = collectionView.dequeueReusableCell(withReuseIdentifier: PostProductDescriptionCell.identifier, for: indexPath) as? PostProductDescriptionCell else {
                 return UICollectionViewCell() }
-            cell.updateView(by: postProduct)
-            cell.touchTextFieldCompletion = { [weak self] touchType in
+            postProductDescriptionTextViewDelegate.touchTextFieldCompletion = { [weak self] touchType in
                 switch touchType {
                 case .beginTouch:
                     self?.setupCollectionViewBottomInset(height: BottomInset.max.height, indexPath: indexPath)
@@ -252,6 +254,9 @@ extension PostProductViewController: UICollectionViewDataSource {
                     self?.setupCollectionViewBottomInset(height: BottomInset.min.height, indexPath: indexPath)
                 }
             }
+            cell.updateView(by: postProduct,
+                            textViewDelegate: postProductDescriptionTextViewDelegate)
+            
             return cell
         default:
             fatalError("Section index out of range")
